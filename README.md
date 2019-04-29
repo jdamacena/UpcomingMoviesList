@@ -1,6 +1,6 @@
 # UpcomingMoviesList
 
-An app that shows a list of upcoming movies (in the United States).
+An app that shows a list of upcoming movies (in the United States). It's made with Xamarin.Forms (tested only on Android).
 
 There are no special instructions needed to build this app.
 
