@@ -1,22 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel;
 using Xamarin.Forms;
 
 namespace UpcomingMoviesList
 {
-    public partial class MainPage : ContentPage
+    public partial class MainPage : ContentPage, INotifyPropertyChanged
     {
         public MainPage()
         {
             InitializeComponent();
         }
-        
-        private async void Button_Clicked(object sender, EventArgs e)
+
+        private async void Movie_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new MovieDetailsPage());
+            Element element = (Element)sender;
+            Movie movie = (Movie)element.BindingContext;
+
+            var movieDetailsPage = new MovieDetailsPage
+            {
+                BindingContext = movie
+            };
+
+            await Navigation.PushAsync(movieDetailsPage);
         }
     }
 }

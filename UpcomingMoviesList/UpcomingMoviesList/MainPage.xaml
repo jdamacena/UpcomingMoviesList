@@ -2,9 +2,64 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:UpcomingMoviesList"
+             xmlns:local1="clr-namespace:UpcomingMoviesList.Converters"
+             xmlns:extended="clr-namespace:Xamarin.Forms.Extended;assembly=Xamarin.Forms.Extended.InfiniteScrolling"
+             xmlns:globe="clr-namespace:System.Globalization;assembly=netstandard"
              x:Class="UpcomingMoviesList.MainPage"
              Title="Upcoming Movies List">
 
-    <Button Text="Open mockup movie" Clicked="Button_Clicked" HorizontalOptions="Center" VerticalOptions="Center"/>
-    
+    <ContentPage.BindingContext>
+        <local:MainPageViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <local1:GenreIdListToStringConverter x:Key="genresIdLIstToString" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <StackLayout>
+
+        <ListView ItemsSource="{Binding Items}" 
+                  CachingStrategy="RecycleElement" 
+                  HasUnevenRows="True"
+                  SelectionMode="None"
+                  x:Name="MoviesListView">
+            <ListView.Behaviors>
+                <extended:InfiniteScrollBehavior IsLoadingMore="{Binding IsBusy}" />
+            </ListView.Behaviors>
+
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell Tapped="Movie_Clicked" >
+                        <Frame HasShadow="True"
+                               Margin="8"
+                               HorizontalOptions="FillAndExpand"
+                               VerticalOptions="FillAndExpand">
+                            <StackLayout >
+                                <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                                    <Image Source="{Binding PosterUrl}" Aspect="AspectFit" />
+                                </Grid>
+                                <Label Text="{Binding Title}" FontSize="18" />
+                                <Label Text="{Binding ReleaseDate, StringFormat='Release date: {0:MMMM dd, yyyy}'}"/>
+                                <Label Text="{Binding Genres, Converter={StaticResource genresIdLIstToString}}"/>
+                            </StackLayout>
+                        </Frame>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+
+            <ListView.Footer>
+                <Grid Padding="6" IsVisible="{Binding IsBusy}">
+                    <Grid.Triggers>
+                        <Trigger TargetType="Grid" Property="IsVisible" Value="False">
+                            <Setter Property="HeightRequest" Value="0" />
+                        </Trigger>
+                    </Grid.Triggers>
+                    <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" VerticalOptions="Center" 
+                                       HorizontalOptions="Center"/>
+                </Grid>
+            </ListView.Footer>
+        </ListView>
+    </StackLayout>
 </ContentPage>
