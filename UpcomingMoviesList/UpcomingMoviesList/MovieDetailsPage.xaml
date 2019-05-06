@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:UpcomingMoviesList"
+             xmlns:local1="clr-namespace:UpcomingMoviesList.Converters"
+             x:Class="UpcomingMoviesList.MovieDetailsPage"
+             Title="{Binding Title}">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <local1:GenreIdListToStringConverter x:Key="genreIdListToString" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout Padding="8" >
+                <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                    <Image Source="{Binding PosterUrl}" Aspect="AspectFill" />
+                </Grid>
+                <Frame HasShadow="True"
+                        HorizontalOptions="FillAndExpand"
+                        VerticalOptions="StartAndExpand">
+                    <StackLayout>
+                        <Label Text="{Binding Title}" FontSize="Large" />
+                        <Label Text="{Binding Genres, Converter={StaticResource genreIdListToString}}"/>
+                        <Label Text="{Binding ReleaseDate, StringFormat='Release date: {0:MMMM dd, yyyy}'}"/>
+                        <BoxView HorizontalOptions="FillAndExpand" HeightRequest="1" Color="Gray"/>
+                        <Label Text="{Binding Overview}" />
+                    </StackLayout>
+                </Frame>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>
